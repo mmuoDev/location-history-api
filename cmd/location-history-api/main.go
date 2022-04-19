@@ -7,12 +7,15 @@ import (
 	"os"
 
 	"github.com/mmuoDev/location-history-api.git/internal/app"
-	"github.com/mmuoDev/location-history-api.git/pkg/db"
+	storage "github.com/mmuoDev/location-history-api.git/pkg/db"
 )
 
 func main() {
 	port := os.Getenv("HISTORY_SERVER_LISTEN_ADDR")
-	conn := db.New()
+	conn, err := storage.New()
+	if err != nil {
+		log.Fatal(err)
+	}
 	a := app.New(conn)
 	if port == "" {
 		port = "8080"
